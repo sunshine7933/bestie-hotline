@@ -58,6 +58,33 @@ body::before{content:"";position:fixed;inset:-22%;z-index:-2;background:
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 90% at 50% 38%,transparent 52%,rgba(6,4,9,.55) 100%)}
 @keyframes auroraDrift{from{transform:translate3d(-2.5%,-1.5%,0) scale(1)}50%{transform:translate3d(2%,2.5%,0) scale(1.07)}to{transform:translate3d(-1%,2%,0) scale(1.04)}}
 @media(prefers-reduced-motion:reduce){body::before{animation:none}}
+
+.hero{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center;margin-bottom:8px}
+.hero .face{border-radius:18px;overflow:hidden;border:1px solid var(--accent);box-shadow:0 18px 44px rgba(0,0,0,.5)}
+.hero .face img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:3/4}
+.bond{margin-top:10px}
+.bond .brow{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.bond .bname{color:var(--accent);font-weight:700}
+.bond .bar{height:8px;border-radius:99px;background:#2c2733;margin-top:6px;overflow:hidden}
+.bond .fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .6s ease}
+.chat{background:rgba(28,25,33,.88);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:20px;padding:20px}
+.msgs{display:flex;flex-direction:column;gap:10px;min-height:120px}
+.msg{max-width:88%;padding:12px 15px;border-radius:16px;line-height:1.5;font-size:1.02rem}
+.msg.her{background:#241c30;border:1px solid #3d3350;border-bottom-left-radius:4px;font-family:Georgia,serif;font-size:1.08rem}
+.msg.me{background:var(--ink);color:#17141c;align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
+.msg .mv{display:block;margin-top:8px;font-family:system-ui;font-size:.92rem;color:var(--muted)}
+.msg.her .mv strong{color:var(--accent)}
+.typing{color:var(--muted);font-style:italic;font-size:.92rem}
+.replies{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.mission{background:rgba(28,25,33,.88);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin-top:26px}
+.mission .k{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.mission .m{font-family:Georgia,serif;font-size:1.28rem;line-height:1.4;margin:10px 0 14px}
+.deck-nav{display:flex;gap:9px;align-items:center;margin-top:10px}
+.deck-count{color:var(--muted);font-size:.9rem}
+body[data-tint="roast"]::before{filter:blur(38px) saturate(1.5) hue-rotate(-24deg)}
+body[data-tint="hype"]::before{filter:blur(38px) saturate(1.3) hue-rotate(16deg)}
+body::before{transition:filter 1.2s ease}
+@media(max-width:560px){.hero{grid-template-columns:112px 1fr}}
 </style>
 </head>
 <body>
@@ -65,8 +92,13 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 <div class="logo">Bestie Hotline</div>
 <h1>Roast me.<br><em>Hype me up.</em></h1>
 <p class="tag">Pick your situation, choose your medicine. Your tough-love bestie is on the line — she drags the problem, never you.</p>
+<div class="hero"><div class="face"><img src="bestie-portrait.webp" alt="Your bestie — a confident grown woman seated by a vintage rotary phone in a moody lounge, waiting to hear about your day"></div><div><div class="logo" style="letter-spacing:.2em">She's in</div><p style="margin:6px 0 0;color:var(--muted);line-height:1.55">This is her lounge. Talk to her below — she talks back, she remembers your streak, and she keeps the good lines behind the counter for her inner circle.</p><div class="bond"><div class="brow"><span>Your bond</span><span class="bname" id="b-bondname">New in town</span></div><div class="bar"><div class="fill" id="b-bondfill" style="width:4%"></div></div><div class="brow" style="margin-top:5px;text-transform:none;letter-spacing:0"><span id="b-stars">0 stars</span><span id="b-bondhint">Do missions and keep lines to grow it</span></div></div></div></div>
 <div class="daily"><div class="k">Bestie's two cents</div><div class="d" id="b-date"></div><p class="line" id="b-daily"></p></div>
-<h2>1 · What's going on?</h2>
+<h2>Talk to her</h2>
+<div class="chat"><div class="msgs" id="b-msgs"></div><div class="replies" id="b-replies"></div></div>
+<div class="mission"><div class="k">Today's mission from your bestie</div><p class="m" id="b-mission"></p><button type="button" class="btn btn-main" id="b-mission-done">Mission done — claim my star</button> <span class="deck-count" id="b-mission-note"></span></div>
+<h2 style="margin-top:34px">Or skip the small talk</h2>
+<h2>What's going on?</h2>
 <div class="chips" id="b-chips"></div>
 <h2>Or tell her yourself</h2><div class="tell"><input id="b-custom" type="text" maxlength="140" placeholder="Type what's actually going on…"><button type="button" class="btn btn-main" id="b-tell">Tell her</button></div>
 <h2>2 · How do you want it?</h2>
@@ -86,7 +118,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 <button type="button" class="btn btn-ghost" id="b-copy">Copy the words</button>
 <button type="button" class="btn btn-ghost" id="b-keep">Keep this line</button>
 </div>
-<div class="stash" id="b-stash-wrap" hidden><h2>Your stash — lines you kept</h2><div id="b-stash"></div></div>
+<div class="stash" id="b-stash-wrap" hidden><h2>Your deck — lines you kept</h2><div class="stash-item"><span id="b-deck-line"></span></div><div class="deck-nav"><button type="button" class="btn btn-ghost" id="b-deck-prev">← Prev</button><button type="button" class="btn btn-ghost" id="b-deck-next">Next →</button><span class="deck-count" id="b-deck-count"></span><button type="button" class="btn btn-ghost" id="b-deck-del" style="margin-left:auto">Remove</button></div></div>
 <footer><div class="flogo">Bestie Hotline</div><br>Tough love, zero sugar-coating. For entertainment and encouragement — your bestie is not a therapist, and on the really heavy days, please reach for a real human who loves you.<br><br>Made with tough love.</footer>
 </div>
 <script id="bestie-script">
@@ -172,9 +204,44 @@ function tellHer(){var v=document.getElementById('b-custom').value.trim();if(!v)
 document.getElementById('b-tell').addEventListener('click',tellHer);
 document.getElementById('b-custom').addEventListener('keydown',function(e){if(e.key==='Enter')tellHer()});
 function stashGet(){try{return JSON.parse(localStorage.getItem('bestie-stash')||'[]')}catch(e){return[]}}
-function stashRender(){var s=stashGet(),w=document.getElementById('b-stash-wrap'),box=document.getElementById('b-stash');w.hidden=s.length===0;box.innerHTML='';s.forEach(function(line,i){var d=document.createElement('div');d.className='stash-item';var sp=document.createElement('span');sp.textContent=line;var x=document.createElement('button');x.type='button';x.textContent='×';x.setAttribute('aria-label','Remove');x.addEventListener('click',function(){var a=stashGet();a.splice(i,1);localStorage.setItem('bestie-stash',JSON.stringify(a));stashRender()});d.appendChild(sp);d.appendChild(x);box.appendChild(d)})}
+function stashRender(){var s=stashGet();document.getElementById('b-stash-wrap').hidden=s.length===0;if(window.__deckRender)window.__deckRender()}
 document.getElementById('b-keep').addEventListener('click',function(){if(!state.current)return;var a=stashGet();if(a.indexOf(state.current.x[0])===-1){a.unshift(state.current.x[0]);localStorage.setItem('bestie-stash',JSON.stringify(a));stashRender()}this.textContent='Kept ✓';var b=this;setTimeout(function(){b.textContent='Keep this line'},1500)});
 stashRender();
+
+var MISSIONS=["Don't text first today. Let them wonder — you're busy becoming.","Drink a full glass of water before your coffee. Future-you says thanks.","Say no to one thing that drains you. No explanation tour afterwards.","Put your phone in another room for one hour. Notice what your brain does.","Wear the outfit that makes you feel like the main character. All day.","Delete one app that makes you feel behind in life. Just one.","Write down one thing you're done apologizing for. Read it twice.","Take the long way home and let your thoughts finish a sentence.","Compliment yourself out loud once. Awkward counts. Do it anyway.","Leave one message on read that doesn't deserve your energy.","Make your bed like a hotel does it. Sleep like you paid for the room.","Spend ten minutes on the thing that could change your money story.","Text your person 'thinking of you' — the one who actually shows up.","End the day with one page, one song, or one stretch. Close it soft."];
+var CELEBRATE=[["Look at you, actually winning. Don't downplay it — say it plain: I did that.","Take a photo of this moment for the days you forget who you are."],["A win is a win, even the quiet kind. Especially the quiet kind.","Tell one person who'd be proud. Let it be witnessed."],["You prayed for days like this in the middle of days that weren't. Remember that.","Write today's date next to the win. Start the evidence file."],["Celebrate loud enough that your past self can hear it. She needed proof it was coming.","Do the small splurge you keep postponing. Within reason, bestie."]];
+var VAULT={ex:{roast:[["Level talk: he didn't lose a good one. He lost access to one, and he knows it every time he checks if you're watching.","Post nothing for him to see for 7 days. Mystery is a language."]],hype:[["Level talk: you are the one that got away — start living like the rumor is true.","Dress like the plot twist for a week. Watch your own posture change."]]},work:{roast:[["Level talk: they pay you for hours, not for your health, your sleep, or your soul. Stop donating the extras.","One boundary email, sent calmly, in writing. Paper trails are power."]],hype:[["Level talk: you're not 'lucky to be there.' They're lucky you're still there. Negotiate like it.","Update one line of your resume tonight with the thing they can't do without you."]]},invisible:{roast:[["Level talk: some people only water what they can pick from. You're not a garden for users.","Go quiet for a week and watch who comes looking. That's your answer."]],hype:[["Level talk: you are not background. You were just standing in other people's light.","Book the thing — the class, the shoot, the table — that's yours alone."]]},disrespected:{roast:[["Level talk: respect is the cover charge. No pay, no entry. That policy is permanent now.","Remove one access point today — the number, the follow, the door key."]],hype:[["Level talk: the calmest person in the argument owns the room. That's you now.","Say your line once, then let silence do the heavy lifting."]]}};
+var LEVELS=[[0,"New in town"],[3,"Regular"],[7,"Inner circle"],[12,"Ride or die"]];
+function starsGet(){return parseInt(localStorage.getItem('bestie-stars')||'0',10)}
+function starsSet(n){localStorage.setItem('bestie-stars',String(n));bondRender()}
+function bondLevel(){var s=starsGet(),lv=0;LEVELS.forEach(function(L,i){if(s>=L[0])lv=i});return lv}
+function bondRender(){var s=starsGet(),lv=bondLevel();document.getElementById('b-bondname').textContent=LEVELS[lv][1];document.getElementById('b-stars').textContent=s+(s===1?' star':' stars');var next=LEVELS[lv+1];document.getElementById('b-bondfill').style.width=Math.min(100,4+s*8)+'%';document.getElementById('b-bondhint').textContent=lv>=2?'Vault lines unlocked — she trusts you now':(next?('Next: '+next[1]+' at '+next[0]+' stars'):'Top bond. She would hide a body for you. (Kidding. Mostly.)')}
+function poolFor(sitIdx,mode){var s=SITUATIONS[sitIdx],base;if(mode==='roast')base=s.roast.map(function(x){return{x:x,m:'The Roast'}});else if(mode==='hype')base=s.hype.map(function(x){return{x:x,m:'The Hype'}});else base=s.roast.map(function(x){return{x:x,m:'The Roast'}}).concat(s.hype.map(function(x){return{x:x,m:'The Hype'}}));if(bondLevel()>=2&&VAULT[s.id]){if(mode!=='hype')base=base.concat(VAULT[s.id].roast.map(function(x){return{x:x,m:'Vault · The Roast'}}));if(mode!=='roast')base=base.concat(VAULT[s.id].hype.map(function(x){return{x:x,m:'Vault · The Hype'}}))}return base}
+var msgs=document.getElementById('b-msgs'),replies=document.getElementById('b-replies'),chatState={};
+function bubble(who,text,move){var d=document.createElement('div');d.className='msg '+who;d.textContent=text;if(move){var sp=document.createElement('span');sp.className='mv';sp.innerHTML='<strong>Your move:</strong> '+move;d.appendChild(sp)}msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d}
+function setReplies(list){replies.innerHTML='';list.forEach(function(r){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=r[0];b.addEventListener('click',function(){bubble('me',r[0]);setReplies([]);r[1]()});replies.appendChild(b)})}
+function herSay(text,move,then){var t=document.createElement('div');t.className='typing';t.textContent='Bestie is typing…';msgs.appendChild(t);setTimeout(function(){t.remove();bubble('her',text,move);if(then)then()},650)}
+function finalLine(sitIdx,mode){var p=poolFor(sitIdx,mode),pick=p[Math.floor(Math.random()*p.length)];state.sit=sitIdx;state.current=pick;document.body.setAttribute('data-tint',pick.m.indexOf('Roast')>-1?'roast':'hype');herSay(pick.x[0],pick.x[1],function(){setReplies([['Another one',function(){finalLine(sitIdx,mode)}],['Keep that line',function(){document.getElementById('b-keep').click();herSay('Kept. It is in your deck now, where it belongs.',null,function(){afterLine(sitIdx,mode)})}],['Give me a mission',function(){herSay('Scroll up — today\'s mission is already on the board. Do it, claim your star, and watch this bond grow.',null,function(){afterLine(sitIdx,mode)})}],['Start over',startChat]])})}
+function afterLine(sitIdx,mode){setReplies([['Another one',function(){finalLine(sitIdx,mode)}],['Different topic',startChat]])}
+function askMode(sitIdx){herSay('And how do you want it — straight roast, straight hype, or dealer\'s choice?',null,function(){setReplies([['Roast me',function(){finalLine(sitIdx,'roast')}],['Hype me',function(){finalLine(sitIdx,'hype')}],['Dealer\'s choice',function(){finalLine(sitIdx,'both')}]])})}
+function askWho(){herSay('Say less. Who is responsible — a person, the job, money, or just the day itself?',null,function(){setReplies([['A person',function(){herSay('Which flavor of person?',null,function(){setReplies([['My ex',function(){askMode(0)}],['Family',function(){askMode(4)}],['Somebody disrespected me',function(){askMode(5)}],['I just feel invisible',function(){askMode(3)}]])})}],['The job',function(){askMode(1)}],['Money',function(){askMode(2)}],['The day itself',function(){askMode(7)}],['Honestly? Everything',function(){askMode(6)}]])})}
+function startChat(){msgs.innerHTML='';document.body.removeAttribute('data-tint');herSay('You made it to the lounge. Rough day, or are we celebrating?',null,function(){setReplies([['Rough day',askWho],['Celebrating, actually',celebrateBranch],['Just needed my bestie',bestieBranch]])})}
+function celebrateBranch(){var c=CELEBRATE[Math.floor(Math.random()*CELEBRATE.length)];state.current={x:c,m:'The Hype'};herSay(c[0],c[1],function(){setReplies([['Keep that line',keepThenRestart],['Talk about my day instead',askWho]])})}
+function keepThenRestart(){document.getElementById('b-keep').click();herSay('Saved to your deck. Proof matters.',null,startChat)}
+function missionTalk(){herSay("Today's mission is on the board above. Do it, claim your star, and watch this bond grow.",null,startChat)}
+function bestieBranch(){var nw=new Date(),st=new Date(nw.getFullYear(),0,0),dy=Math.floor((nw-st)/864e5),line=DAILY[(dy-1)%DAILY.length];state.current={x:[line,''],m:'Two Cents'};herSay(line,null,function(){setReplies([['Talk about my day',askWho],['Give me a mission',missionTalk]])})}
+var mnow=new Date(),mstart=new Date(mnow.getFullYear(),0,0),mdoy=Math.floor((mnow-mstart)/864e5);
+document.getElementById('b-mission').textContent=MISSIONS[(mdoy-1)%MISSIONS.length];
+var mkey='bestie-mission-done',todayStr=mnow.toDateString();
+function missionRender(){var done=localStorage.getItem(mkey)===todayStr;document.getElementById('b-mission-done').disabled=done;document.getElementById('b-mission-done').textContent=done?'Star claimed — see you tomorrow':'Mission done — claim my star';document.getElementById('b-mission-note').textContent=done?'Done for today. She is proud of you.':''}
+document.getElementById('b-mission-done').addEventListener('click',function(){if(localStorage.getItem(mkey)===todayStr)return;localStorage.setItem(mkey,todayStr);starsSet(starsGet()+1);missionRender()});
+var deckIdx=0;
+function deckRender(){var s=stashGet(),w=document.getElementById('b-stash-wrap');w.hidden=s.length===0;if(!s.length)return;if(deckIdx>=s.length)deckIdx=0;if(deckIdx<0)deckIdx=s.length-1;document.getElementById('b-deck-line').textContent=s[deckIdx];document.getElementById('b-deck-count').textContent='Card '+(deckIdx+1)+' of '+s.length}
+document.getElementById('b-deck-prev').addEventListener('click',function(){deckIdx--;deckRender()});
+document.getElementById('b-deck-next').addEventListener('click',function(){deckIdx++;deckRender()});
+document.getElementById('b-deck-del').addEventListener('click',function(){var a=stashGet();a.splice(deckIdx,1);localStorage.setItem('bestie-stash',JSON.stringify(a));deckRender()});
+window.__deckRender=deckRender;
+bondRender();missionRender();deckRender();startChat();
 var now=new Date(),start=new Date(now.getFullYear(),0,0),doy=Math.floor((now-start)/864e5);
 document.getElementById('b-date').textContent=now.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
 document.getElementById('b-daily').textContent=DAILY[(doy-1)%DAILY.length];
