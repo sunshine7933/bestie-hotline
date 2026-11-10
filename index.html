@@ -8,13 +8,13 @@
 <style>
 :root{--bg:#131116;--panel:#1c1921;--line:#37323f;--accent:#d9a05b;--accent2:#b08cc7;--ink:#f3efe9;--muted:#a89fb2}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(1000px 520px at 85% -10%,#241a30 0%,transparent 55%),radial-gradient(800px 460px at -10% 25%,#221a18 0%,transparent 50%),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+body{margin:0;background:linear-gradient(rgba(19,17,22,.84),rgba(19,17,22,.95)),url('bestie-bg.webp') center/cover fixed no-repeat,var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
 .wrap{max-width:620px;margin:0 auto;padding:34px 20px 60px}
 .logo{font-size:.78rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);font-weight:700}
 h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(2.4rem,9vw,3.4rem);line-height:1.05;margin:10px 0 10px;font-weight:400}
 h1 em{color:var(--accent);font-style:italic}
 .tag{font-size:1.08rem;color:var(--muted);margin:0 0 28px;line-height:1.55}
-.daily{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin-bottom:30px}
+.daily{background:rgba(28,25,33,.88);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin-bottom:30px}
 .daily .k{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);font-weight:700}
 .daily .d{font-size:.85rem;color:var(--muted);margin-top:3px}
 .daily .line{font-family:Georgia,serif;font-size:1.3rem;line-height:1.4;margin:10px 0 0}
@@ -26,7 +26,7 @@ h2{font-size:.8rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mut
 .mode{flex:1;padding:13px;border-radius:14px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-weight:700;cursor:pointer;letter-spacing:.04em}
 .mode[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#17141c}
 .card{margin-top:26px;border-radius:20px;padding:1px;background:linear-gradient(135deg,var(--accent),#5c4a72)}
-.card-in{background:#191620;border-radius:19px;padding:26px 24px;min-height:200px}
+.card-in{background:rgba(25,22,32,.9);backdrop-filter:blur(6px);border-radius:19px;padding:26px 24px;min-height:200px}
 .card .mode-tag{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);font-weight:700}
 .card .big{font-family:Georgia,serif;font-size:clamp(1.45rem,5.4vw,1.9rem);line-height:1.35;margin:12px 0 14px}
 .card .move{color:var(--muted);font-size:1rem;line-height:1.55}
@@ -38,6 +38,16 @@ h2{font-size:.8rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mut
 .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 footer{margin-top:46px;color:var(--muted);font-size:.88rem;text-align:center;line-height:1.65}
 footer .flogo{color:var(--accent);letter-spacing:.3em;font-weight:700;font-size:.7rem;text-transform:uppercase}
+
+.tell{display:flex;gap:9px;margin-top:4px}
+.tell input{flex:1;padding:13px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(28,25,33,.85);color:var(--ink);font:inherit}
+.tell input::placeholder{color:var(--muted)}
+@keyframes bestieIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.card-in.pop{animation:bestieIn .45s ease}
+@media(prefers-reduced-motion:reduce){.card-in.pop{animation:none}}
+.stash{margin-top:34px}
+.stash-item{display:flex;gap:10px;align-items:flex-start;background:rgba(28,25,33,.88);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:9px;font-family:Georgia,serif;font-size:1.02rem;line-height:1.45}
+.stash-item button{margin-left:auto;background:none;border:0;color:var(--muted);font-size:1.05rem;cursor:pointer;flex:none}
 </style>
 </head>
 <body>
@@ -48,6 +58,7 @@ footer .flogo{color:var(--accent);letter-spacing:.3em;font-weight:700;font-size:
 <div class="daily"><div class="k">Bestie's two cents</div><div class="d" id="b-date"></div><p class="line" id="b-daily"></p></div>
 <h2>1 · What's going on?</h2>
 <div class="chips" id="b-chips"></div>
+<h2>Or tell her yourself</h2><div class="tell"><input id="b-custom" type="text" maxlength="140" placeholder="Type what's actually going on…"><button type="button" class="btn btn-main" id="b-tell">Tell her</button></div>
 <h2>2 · How do you want it?</h2>
 <div class="modes">
 <button type="button" class="mode roast" data-mode="roast" aria-pressed="true">Roast me</button>
@@ -63,7 +74,9 @@ footer .flogo{color:var(--accent);letter-spacing:.3em;font-weight:700;font-size:
 <button type="button" class="btn btn-main" id="b-again">Hit me again</button>
 <button type="button" class="btn btn-ghost" id="b-save">Save the card</button>
 <button type="button" class="btn btn-ghost" id="b-copy">Copy the words</button>
+<button type="button" class="btn btn-ghost" id="b-keep">Keep this line</button>
 </div>
+<div class="stash" id="b-stash-wrap" hidden><h2>Your stash — lines you kept</h2><div id="b-stash"></div></div>
 <footer><div class="flogo">Bestie Hotline</div><br>Tough love, zero sugar-coating. For entertainment and encouragement — your bestie is not a therapist, and on the really heavy days, please reach for a real human who loves you.<br><br>Made with tough love.</footer>
 </div>
 <script id="bestie-script">
@@ -139,10 +152,19 @@ var chips=document.getElementById('b-chips');
 SITUATIONS.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=s.label;b.setAttribute('aria-pressed','false');b.addEventListener('click',function(){state.sit=i;chips.querySelectorAll('.chip').forEach(function(c,j){c.setAttribute('aria-pressed',String(j===i))});deliver()});chips.appendChild(b)});
 document.querySelectorAll('.mode').forEach(function(b){b.addEventListener('click',function(){state.mode=b.getAttribute('data-mode');document.querySelectorAll('.mode').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});if(state.sit!==null)deliver()})});
 function pool(){var s=SITUATIONS[state.sit];if(state.mode==='roast')return s.roast.map(function(x){return{x:x,m:'The Roast'}});if(state.mode==='hype')return s.hype.map(function(x){return{x:x,m:'The Hype'}});return s.roast.map(function(x){return{x:x,m:'The Roast'}}).concat(s.hype.map(function(x){return{x:x,m:'The Hype'}}))}
-function deliver(){var p=pool(),i;do{i=Math.floor(Math.random()*p.length)}while(p.length>1&&i===state.last);state.last=i;state.current=p[i];document.getElementById('b-tag').textContent=p[i].m;document.getElementById('b-line').textContent=p[i].x[0];document.getElementById('b-move').innerHTML='<strong>Your move:</strong> '+p[i].x[1]}
+function deliver(){var p=pool(),i;do{i=Math.floor(Math.random()*p.length)}while(p.length>1&&i===state.last);state.last=i;state.current=p[i];document.getElementById('b-tag').textContent=p[i].m;document.getElementById('b-line').textContent=p[i].x[0];document.getElementById('b-move').innerHTML='<strong>Your move:</strong> '+p[i].x[1];var ci=document.querySelector('.card-in');ci.classList.remove('pop');void ci.offsetWidth;ci.classList.add('pop')}
 document.getElementById('b-again').addEventListener('click',function(){if(state.sit===null){document.getElementById('b-line').textContent='Pick a situation first, bestie. Then she talks.';return}deliver()});
 document.getElementById('b-copy').addEventListener('click',function(){if(!state.current)return;var t=state.current.x[0]+' — Bestie Hotline';if(navigator.clipboard)navigator.clipboard.writeText(t);this.textContent='Copied ✓';var b=this;setTimeout(function(){b.textContent='Copy the words'},1600)});
 document.getElementById('b-save').addEventListener('click',function(){if(!state.current)return;var cv=document.createElement('canvas');cv.width=1080;cv.height=1350;var g=cv.getContext('2d');var gr=g.createLinearGradient(0,0,1080,1350);gr.addColorStop(0,'#1e1a26');gr.addColorStop(1,'#131116');g.fillStyle=gr;g.fillRect(0,0,1080,1350);g.strokeStyle='#d9a05b';g.lineWidth=4;g.strokeRect(36,36,1008,1278);g.fillStyle='#d9a05b';g.font='700 32px system-ui';g.textAlign='center';g.fillText('B E S T I E   H O T L I N E',540,140);g.fillStyle='#a89fb2';g.font='700 36px system-ui';g.fillText(state.current.m.toUpperCase(),540,215);g.fillStyle='#f3efe9';g.font='italic 58px Georgia,serif';var words=state.current.x[0].split(' '),lines=[],cur='';words.forEach(function(w){if(g.measureText(cur+' '+w).width>880&&cur){lines.push(cur);cur=w}else{cur=cur?cur+' '+w:w}});if(cur)lines.push(cur);var y=1350/2-(lines.length*78)/2;lines.forEach(function(l){g.fillText(l,540,y);y+=78});g.fillStyle='#a89fb2';g.font='600 32px system-ui';g.fillText('Roast me. Hype me.',540,1240);var a=document.createElement('a');a.download='bestie-hotline-card.png';a.href=cv.toDataURL('image/png');a.click()});
+
+var ROUTES=[[/ex|boy ?friend|girl ?friend|he texted|she texted|broke up|breakup|baby daddy/i,0],[/work|job|boss|coworker|shift|fired/i,1],[/money|broke|rent|bill|debt|paycheck|paid/i,2],[/invisible|ignored|nobody|alone|lonely|left out|unseen/i,3],[/mom|dad|family|sister|brother|aunt|kids|children|husband|wife/i,4],[/disrespect|rude|yelled|insult|mean to me|talked down/i,5],[/give up|quit|tired of trying|hopeless|can't do this|done trying/i,6]];
+function tellHer(){var v=document.getElementById('b-custom').value.trim();if(!v)return;var idx=7;for(var k=0;k<ROUTES.length;k++){if(ROUTES[k][0].test(v)){idx=ROUTES[k][1];break}}state.sit=idx;chips.querySelectorAll('.chip').forEach(function(c,j){c.setAttribute('aria-pressed',String(j===idx))});deliver();document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'center'})}
+document.getElementById('b-tell').addEventListener('click',tellHer);
+document.getElementById('b-custom').addEventListener('keydown',function(e){if(e.key==='Enter')tellHer()});
+function stashGet(){try{return JSON.parse(localStorage.getItem('bestie-stash')||'[]')}catch(e){return[]}}
+function stashRender(){var s=stashGet(),w=document.getElementById('b-stash-wrap'),box=document.getElementById('b-stash');w.hidden=s.length===0;box.innerHTML='';s.forEach(function(line,i){var d=document.createElement('div');d.className='stash-item';var sp=document.createElement('span');sp.textContent=line;var x=document.createElement('button');x.type='button';x.textContent='×';x.setAttribute('aria-label','Remove');x.addEventListener('click',function(){var a=stashGet();a.splice(i,1);localStorage.setItem('bestie-stash',JSON.stringify(a));stashRender()});d.appendChild(sp);d.appendChild(x);box.appendChild(d)})}
+document.getElementById('b-keep').addEventListener('click',function(){if(!state.current)return;var a=stashGet();if(a.indexOf(state.current.x[0])===-1){a.unshift(state.current.x[0]);localStorage.setItem('bestie-stash',JSON.stringify(a));stashRender()}this.textContent='Kept ✓';var b=this;setTimeout(function(){b.textContent='Keep this line'},1500)});
+stashRender();
 var now=new Date(),start=new Date(now.getFullYear(),0,0),doy=Math.floor((now-start)/864e5);
 document.getElementById('b-date').textContent=now.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
 document.getElementById('b-daily').textContent=DAILY[(doy-1)%DAILY.length];
