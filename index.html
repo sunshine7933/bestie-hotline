@@ -59,9 +59,9 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 @keyframes auroraDrift{from{transform:translate3d(-2.5%,-1.5%,0) scale(1)}50%{transform:translate3d(2%,2.5%,0) scale(1.07)}to{transform:translate3d(-1%,2%,0) scale(1.04)}}
 @media(prefers-reduced-motion:reduce){body::before{animation:none}}
 
-.hero{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center;margin-bottom:8px}
+.hero{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:8px}
 .hero .face{border-radius:18px;overflow:hidden;border:1px solid var(--accent);box-shadow:0 18px 44px rgba(0,0,0,.5)}
-.hero .face img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:3/4}
+.hero .face img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:16/10}
 .bond{margin-top:10px}
 .bond .brow{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 .bond .bname{color:var(--accent);font-weight:700}
@@ -84,7 +84,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 body[data-tint="roast"]::before{filter:blur(38px) saturate(1.5) hue-rotate(-24deg)}
 body[data-tint="hype"]::before{filter:blur(38px) saturate(1.3) hue-rotate(16deg)}
 body::before{transition:filter 1.2s ease}
-@media(max-width:560px){.hero{grid-template-columns:112px 1fr}}
+
 </style>
 </head>
 <body>
@@ -92,7 +92,7 @@ body::before{transition:filter 1.2s ease}
 <div class="logo">Bestie Hotline</div>
 <h1>Roast me.<br><em>Hype me up.</em></h1>
 <p class="tag">Pick your situation, choose your medicine. Your tough-love bestie is on the line — she drags the problem, never you.</p>
-<div class="hero"><div class="face"><img src="bestie-portrait.webp" alt="Your bestie — a confident grown woman seated by a vintage rotary phone in a moody lounge, waiting to hear about your day"></div><div><div class="logo" style="letter-spacing:.2em">She's in</div><p style="margin:6px 0 0;color:var(--muted);line-height:1.55">This is her lounge. Talk to her below — she talks back, she remembers your streak, and she keeps the good lines behind the counter for her inner circle.</p><div class="bond"><div class="brow"><span>Your bond</span><span class="bname" id="b-bondname">New in town</span></div><div class="bar"><div class="fill" id="b-bondfill" style="width:4%"></div></div><div class="brow" style="margin-top:5px;text-transform:none;letter-spacing:0"><span id="b-stars">0 stars</span><span id="b-bondhint">Do missions and keep lines to grow it</span></div></div></div></div>
+<div class="hero"><div class="face"><img src="bestie-portrait.webp" alt="Walking into the lounge: your bestie seated behind her marble desk with the vintage rotary phone, looking up at you, aurora light glowing behind her"></div><div><div class="logo" style="letter-spacing:.2em">She's in</div><p style="margin:6px 0 0;color:var(--muted);line-height:1.55">This is her lounge. Talk to her below — she talks back, she remembers your streak, and she keeps the good lines behind the counter for her inner circle.</p><div class="bond"><div class="brow"><span>Your bond</span><span class="bname" id="b-bondname">New in town</span></div><div class="bar"><div class="fill" id="b-bondfill" style="width:4%"></div></div><div class="brow" style="margin-top:5px;text-transform:none;letter-spacing:0"><span id="b-stars">0 stars</span><span id="b-bondhint">Do missions and keep lines to grow it</span></div></div></div></div>
 <div class="daily"><div class="k">Bestie's two cents</div><div class="d" id="b-date"></div><p class="line" id="b-daily"></p></div>
 <h2>Talk to her</h2>
 <div class="chat"><div class="msgs" id="b-msgs"></div><div class="replies" id="b-replies"></div></div>
