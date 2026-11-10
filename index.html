@@ -85,42 +85,41 @@ body[data-tint="roast"]::before{filter:blur(38px) saturate(1.55) hue-rotate(-18d
 body[data-tint="hype"]::before{filter:blur(38px) saturate(1.4) hue-rotate(12deg)}
 body::before{transition:filter 1.2s ease}
 
+
+.wrap{max-width:1280px}
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr) 320px;gap:26px;align-items:start;margin-top:14px}
+.rail{position:sticky;top:16px;display:flex;flex-direction:column;gap:22px}
+.rail .daily,.rail .mission,.rail .stash{margin:0}
+.stage h2:first-child{margin-top:0}
+.side-panel{background:rgba(36,26,21,.88);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.side-panel .k{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.rules{margin:12px 0 0;padding-left:19px;color:var(--muted);line-height:1.6;font-size:.97rem}
+.rules li{margin-bottom:9px}
+.share-txt{color:var(--muted);line-height:1.55;margin:10px 0 14px}
+@media(min-width:1024px){.hero .face img{aspect-ratio:21/9}}
+@media(max-width:1023px){.layout{display:flex;flex-direction:column}.rail{position:static}.stage{order:1}.rail-left{order:2}.rail-right{order:3}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<div class="logo">Bestie Hotline</div>
+<div class="wrap"><div class="logo">Bestie Hotline</div>
 <h1>Roast me.<br><em>Hype me up.</em></h1>
 <p class="tag">Pick your situation, choose your medicine. Your tough-love bestie is on the line — she drags the problem, never you.</p>
 <div class="hero"><div class="face"><img src="bestie-portrait.webp" alt="Walking into the lounge: your bestie seated behind her marble desk with the vintage rotary phone, looking up at you, aurora light glowing behind her"></div><div><div class="logo" style="letter-spacing:.2em">She's in</div><p style="margin:6px 0 0;color:var(--muted);line-height:1.55">This is her lounge. Talk to her below — she talks back, she remembers your streak, and she keeps the good lines behind the counter for her inner circle.</p><div class="bond"><div class="brow"><span>Your bond</span><span class="bname" id="b-bondname">New in town</span></div><div class="bar"><div class="fill" id="b-bondfill" style="width:4%"></div></div><div class="brow" style="margin-top:5px;text-transform:none;letter-spacing:0"><span id="b-stars">0 stars</span><span id="b-bondhint">Do missions and keep lines to grow it</span></div></div></div></div>
-<div class="daily"><div class="k">Bestie's two cents</div><div class="d" id="b-date"></div><p class="line" id="b-daily"></p></div>
-<h2>Talk to her</h2>
-<div class="chat"><div class="msgs" id="b-msgs"></div><div class="replies" id="b-replies"></div></div>
-<div class="mission"><div class="k">Today's mission from your bestie</div><p class="m" id="b-mission"></p><button type="button" class="btn btn-main" id="b-mission-done">Mission done — claim my star</button> <span class="deck-count" id="b-mission-note"></span></div>
-<h2 style="margin-top:34px">Or skip the small talk</h2>
-<h2>What's going on?</h2>
-<div class="chips" id="b-chips"></div>
-<h2>Or tell her yourself</h2><div class="tell"><input id="b-custom" type="text" maxlength="140" placeholder="Type what's actually going on…"><button type="button" class="btn btn-main" id="b-tell">Tell her</button></div>
-<h2>2 · How do you want it?</h2>
-<div class="modes">
+<div class="layout"><aside class="rail rail-left"><div class="daily"><div class="k">Bestie's two cents</div><div class="d" id="b-date"></div><p class="line" id="b-daily"></p></div><div class="mission"><div class="k">Today's mission from your bestie</div><p class="m" id="b-mission"></p><button type="button" class="btn btn-main" id="b-mission-done">Mission done — claim my star</button> <span class="deck-count" id="b-mission-note"></span></div></aside><main class="stage"><h2>Talk to her</h2><div class="chat"><div class="msgs" id="b-msgs"></div><div class="replies" id="b-replies"></div></div><h2 style="margin-top:34px">Or skip the small talk</h2><h2>What's going on?</h2><div class="chips" id="b-chips"></div><h2>Or tell her yourself</h2><div class="tell"><input id="b-custom" type="text" maxlength="140" placeholder="Type what's actually going on…"><button type="button" class="btn btn-main" id="b-tell">Tell her</button></div><h2>2 · How do you want it?</h2><div class="modes">
 <button type="button" class="mode roast" data-mode="roast" aria-pressed="true">Roast me</button>
 <button type="button" class="mode" data-mode="hype" aria-pressed="false">Hype me</button>
 <button type="button" class="mode" data-mode="both" aria-pressed="false">Both</button>
-</div>
-<div class="card"><div class="card-in">
+</div><div class="card"><div class="card-in">
 <div class="mode-tag" id="b-tag">Bestie says</div>
 <p class="big" id="b-line"><span class="placeholder">Pick a situation up top, bestie. She's warming up.</span></p>
 <p class="move" id="b-move"></p>
-</div></div>
-<div class="actions">
+</div></div><div class="actions">
 <button type="button" class="btn btn-main" id="b-again">Hit me again</button>
 <button type="button" class="btn btn-ghost" id="b-save">Save the card</button>
 <button type="button" class="btn btn-ghost" id="b-copy">Copy the words</button>
 <button type="button" class="btn btn-ghost" id="b-keep">Keep this line</button>
-</div>
-<div class="stash" id="b-stash-wrap" hidden><h2>Your deck — lines you kept</h2><div class="stash-item"><span id="b-deck-line"></span></div><div class="deck-nav"><button type="button" class="btn btn-ghost" id="b-deck-prev">← Prev</button><button type="button" class="btn btn-ghost" id="b-deck-next">Next →</button><span class="deck-count" id="b-deck-count"></span><button type="button" class="btn btn-ghost" id="b-deck-del" style="margin-left:auto">Remove</button></div></div>
-<footer><div class="flogo">Bestie Hotline</div><br>Tough love, zero sugar-coating. For entertainment and encouragement — your bestie is not a therapist, and on the really heavy days, please reach for a real human who loves you.<br><br>Made with tough love.</footer>
-</div>
+</div></main><aside class="rail rail-right"><div class="stash" id="b-stash-wrap" hidden><h2>Your deck — lines you kept</h2><div class="stash-item"><span id="b-deck-line"></span></div><div class="deck-nav"><button type="button" class="btn btn-ghost" id="b-deck-prev">← Prev</button><button type="button" class="btn btn-ghost" id="b-deck-next">Next →</button><span class="deck-count" id="b-deck-count"></span><button type="button" class="btn btn-ghost" id="b-deck-del" style="margin-left:auto">Remove</button></div></div><div class="side-panel"><div class="k">House rules</div><ol class="rules"><li>She drags the problem, never you.</li><li>What's said in the lounge stays in the lounge — your deck lives on your phone, not on a server.</li><li>Vault lines are for the inner circle. Earn the bond.</li><li>On the really heavy days she'll point you to a real human who loves you. Listen to her.</li></ol></div><div class="side-panel"><div class="k">Bring a friend</div><p class="share-txt">Know somebody who needs a bestie tonight? Send them the lounge.</p><button type="button" class="btn btn-main" id="b-share">Copy the lounge link</button></div></aside></div>
+<footer><div class="flogo">Bestie Hotline</div><br>Tough love, zero sugar-coating. For entertainment and encouragement — your bestie is not a therapist, and on the really heavy days, please reach for a real human who loves you.<br><br>Made with tough love.</footer></div>
 <script id="bestie-script">
 var SITUATIONS=[
 {id:"ex",label:"My ex texted",roast:[
@@ -245,6 +244,9 @@ bondRender();missionRender();deckRender();startChat();
 var now=new Date(),start=new Date(now.getFullYear(),0,0),doy=Math.floor((now-start)/864e5);
 document.getElementById('b-date').textContent=now.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
 document.getElementById('b-daily').textContent=DAILY[(doy-1)%DAILY.length];
+</script>
+<script>
+document.getElementById('b-share').addEventListener('click',function(){var t='Bestie Hotline — roast me, hype me: '+location.href;if(navigator.clipboard)navigator.clipboard.writeText(t);this.textContent='Copied ✓';var b=this;setTimeout(function(){b.textContent='Copy the lounge link'},1600)});
 </script>
 </body>
 </html>
