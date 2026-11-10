@@ -8,7 +8,7 @@
 <style>
 :root{--bg:#131116;--panel:#1c1921;--line:#37323f;--accent:#d9a05b;--accent2:#b08cc7;--ink:#f3efe9;--muted:#a89fb2}
 *{box-sizing:border-box}
-body{margin:0;background:linear-gradient(rgba(19,17,22,.84),rgba(19,17,22,.95)),url('bestie-bg.webp') center/cover fixed no-repeat,var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+body{margin:0;background:var(--bg);position:relative;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
 .wrap{max-width:620px;margin:0 auto;padding:34px 20px 60px}
 .logo{font-size:.78rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);font-weight:700}
 h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(2.4rem,9vw,3.4rem);line-height:1.05;margin:10px 0 10px;font-weight:400}
@@ -48,6 +48,16 @@ footer .flogo{color:var(--accent);letter-spacing:.3em;font-weight:700;font-size:
 .stash{margin-top:34px}
 .stash-item{display:flex;gap:10px;align-items:flex-start;background:rgba(28,25,33,.88);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:9px;font-family:Georgia,serif;font-size:1.02rem;line-height:1.45}
 .stash-item button{margin-left:auto;background:none;border:0;color:var(--muted);font-size:1.05rem;cursor:pointer;flex:none}
+
+body::before{content:"";position:fixed;inset:-22%;z-index:-2;background:
+ radial-gradient(42% 38% at 18% 22%,rgba(110,36,56,.55),transparent 70%),
+ radial-gradient(46% 42% at 82% 16%,rgba(59,42,99,.6),transparent 70%),
+ radial-gradient(50% 46% at 72% 82%,rgba(176,106,44,.38),transparent 70%),
+ radial-gradient(40% 40% at 26% 84%,rgba(74,32,80,.5),transparent 70%),#100d13;
+ filter:blur(38px) saturate(1.15);animation:auroraDrift 48s ease-in-out infinite alternate}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 90% at 50% 38%,transparent 52%,rgba(6,4,9,.55) 100%)}
+@keyframes auroraDrift{from{transform:translate3d(-2.5%,-1.5%,0) scale(1)}50%{transform:translate3d(2%,2.5%,0) scale(1.07)}to{transform:translate3d(-1%,2%,0) scale(1.04)}}
+@media(prefers-reduced-motion:reduce){body::before{animation:none}}
 </style>
 </head>
 <body>
